@@ -1,7 +1,7 @@
 import re
 import json
 
-dictionary_dsl = open('ru-ru_PhraseVolkova_1_0.dsl', 'r', encoding='utf-8').readlines()
+dictionary_dsl = open('volkova.dsl', 'r', encoding='utf-8').readlines()
 # dictionary_dsl.close()
 
 idioms_lists = []
