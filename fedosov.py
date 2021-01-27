@@ -1,7 +1,7 @@
 import json
 import re
 
-dsl_dictionary = open('ru-ru_phraseology_fedosov_1_0.dsl', 'r', encoding='utf-8')
+dsl_dictionary = open('fedosov.dsl', 'r', encoding='utf-8')
 dictionary_lines = dsl_dictionary.readlines()[38:]
 
 idioms_lists = []

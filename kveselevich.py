@@ -14,7 +14,7 @@ def find_examples(article):
     return text_example, source_example
 
 
-dsl_dictionary = open('IdiomsRuEn.dsl', 'r', encoding='utf-8')
+dsl_dictionary = open('kveselevich.dsl', 'r', encoding='utf-8')
 
 idioms_lists = []
 abbr_list = ['Bibl.', 'derog.', 'fig.', 'iron.', 'joc.', 'библ.', 'бран.', 'воен.', 'вульг.', 'высок.', 'груб.',

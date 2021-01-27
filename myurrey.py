@@ -1,6 +1,6 @@
 import json
 
-dsl_dictionary = open('Ru-En_IdiomsEquivalents.dsl', 'r', encoding='utf-8')
+dsl_dictionary = open('myurrey.dsl', 'r', encoding='utf-8')
 dictionary_lines = dsl_dictionary.readlines()
 
 idioms_lists = []
