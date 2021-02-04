@@ -17,10 +17,8 @@ def find_examples(article):
 dsl_dictionary = open('kveselevich.dsl', 'r', encoding='utf-8')
 
 idioms_lists = []
-abbr_list = ['Bibl.', 'derog.', 'fig.', 'iron.', 'joc.', 'библ.', 'бран.', 'воен.', 'вульг.', 'высок.', 'груб.',
-             'груб.-прост.', 'детск.', 'жарг.', 'ирон.', 'ист.', 'книжн.', 'ласк.', 'мор.', 'неодобр.', 'одобр.',
-             'охот.', 'погов.', 'посл.', 'поэт.', 'презр.', 'пренебр.', 'прост.', 'разг.', 'рел.', 'спорт.', 'театр.',
-             'уст.', 'фам.', 'фольк.', 'церк.', 'церк.-слав.', 'шахм.', 'шутл.', 'шутл.-ирон.', 'эвф.', 'эт.', 'юр.']
+with open('abbrs.txt', encoding='utf-8') as abbrs:
+    abbr_list = list(map(lambda x: x[:-1], abbrs.readlines()[::2]))
 
 
 def clean(text: str) -> str:
@@ -45,7 +43,7 @@ for article_index, article in enumerate(dsl_dictionary.read().split('\n\n')[1:])
     article_lines = [article_line for article_line in article.split('\n') if '[ref]' not in article_line]
     if len(article_lines) == 1:
         continue
-    full_dict = dict(phrase=[clean(article_lines[0])], semantics=[{'role': [], 'meaning': '', 'abbr': [], 'examples': []}])
+    full_dict = dict(phrase=[clean(article_lines[0])], semantics=[{'dictionary': 'Kveselevich', 'role': [], 'meaning': '', 'abbr': [], 'examples': []}])
 
     if '[ex][lang id=1049]' in article:
         text_example, source_example = find_examples(article)

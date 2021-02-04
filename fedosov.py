@@ -17,7 +17,9 @@ for line in dictionary_lines:
         if idiom_dict['phrase']:
             idioms_lists.append(idiom_dict)
 
-        idiom_dict = {'phrase': [], 'semantics': [{'role': [], 'meaning': '', 'abbr': [], 'examples': []}]}
+        idiom_dict = {'phrase': [], 'semantics': [
+            {'dictionary': 'Fedosov', 'role': [], 'meaning': '', 'abbr': [], 'examples': []}
+        ]}
         phrase_mean = line.split(' -')
 
         abbrs = re.findall(r'\[p](.*?)\[/p]', phrase_mean[0])
@@ -37,7 +39,7 @@ for line in dictionary_lines:
                 idiom_dict['semantics'][0]['role'].append(find_role[-1])
                 phrase_mean[0] = phrase_mean[0].replace(find_role[-1], '')
 
-        idiom_dict['phrase'] = clean_phrase(phrase_mean[0])
+        idiom_dict['phrase'].append(clean_phrase(phrase_mean[0]))
 
         if phrase_mean[-1] != '\n' and phrase_mean[-1] != '\t' and \
                 any([letter.isalpha() for letter in phrase_mean[-1]]):
@@ -46,7 +48,7 @@ for line in dictionary_lines:
 
     elif line.startswith('\t[m4]'):
         if idiom_dict['semantics'][-1]['meaning']:
-            idiom_dict['semantics'].append({'role': [], 'meaning': '', 'abbr': [], 'examples': []})
+            idiom_dict['semantics'].append({'dictionary': 'Fedosov', 'role': [], 'meaning': '', 'abbr': [], 'examples': []})
         abbrs = re.findall(r'\[p](.*?)\[/p]', line)
         for abbr in abbrs:
             idiom_dict['semantics'][-1]['abbr'].append(abbr)

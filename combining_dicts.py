@@ -1,4 +1,5 @@
 import json
+import re
 
 with open('fedosov.json', 'r', encoding='utf-8') as file:
     fedosov = json.load(file)
@@ -11,29 +12,35 @@ with open('volkova.json', 'r', encoding='utf-8') as file:
 with open('fedorov.json', 'r', encoding='utf-8') as file:
     fedorov = json.load(file)
 
-"""
-fedosov = json.load(open('fedosov.json', 'r'))
-kveselevich = json.load(open('kveselevich.json', 'r'))
-myurrey = json.load(open('myurrey.json', 'r'))
-volkova = json.load(open('volkova.json', 'r'))
-durandin = json.load(open('fedorov.json', 'r'))
-"""
-# TODO: выделить автора в случаях типа "Сыграем еще партию сверх абонемента. Салтыков-Щедрин."
-key_dict = volkova  # TODO: choose the main dict here
-all_phrases = []
-all_phrases.extend([phr['phrase'] for phr in key_dict])
 
-for diction in [kveselevich, myurrey, fedosov]:
-    for idiom in diction:
-        if idiom['phrase'][0] not in all_phrases:   # all(elem in all_phrases for elem in phrase['phrase'])?? or empty?
-            all_phrases.extend(idiom['phrase'])  # TODO: use .strip()
-            key_dict.append(idiom)
-            continue
-        # {'phrase': [], 'semantics': [{'role': [], 'meaning': '', 'abbr': [], 'examples': []}]}
-        for phrase in key_dict:
-            if idiom['phrase'][0] in phrase['phrase']:
-                phrase['semantics'].extend(idiom['semantics'])
+def leave_letters_only(phrase):
+    return re.sub(r'[^а-я]', '', phrase.lower())
+
+
+key_dict = fedorov
+all_phrases = set()
+current_dict_left = set()
+for phrase in key_dict:
+    all_phrases.union(set([leave_letters_only(p) for p in phrase['phrase'] if len(leave_letters_only(p)) > 1]))
+
+for dictionary in [fedosov, kveselevich, myurrey, volkova]:
+    for article in dictionary:
+
+        for phrase in article['phrase']:
+            if leave_letters_only(phrase) in all_phrases:
+                for key_phrase in key_dict:
+                    if leave_letters_only(phrase) in [leave_letters_only(p) for p in key_phrase['phrase']]:
+                        key_phrase['semantics'].extend(article['semantics'])
+                        break
+
                 break
+        else:
+            current_dict_left.union(set([leave_letters_only(phr) for phr in article['phrase']]))
+            key_dict.append(article)
+
+    all_phrases.union(current_dict_left)
+
 
 with open('all_idioms.json', 'w', encoding='utf8') as fp:
     json.dump(key_dict, fp, ensure_ascii=False, indent=4)
+

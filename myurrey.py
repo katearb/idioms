@@ -24,7 +24,7 @@ for line in dictionary_lines:
             key_role[0] = key_role[0][:-1]
 
         idiom_dict['phrase'] = [key_role[0]]
-        idiom_dict['semantics'] = [{'role': [], 'meaning': '', 'abbr': [], 'examples': []}]
+        idiom_dict['semantics'] = [{'dictionary': 'Myurrey', 'role': [], 'meaning': '', 'abbr': [], 'examples': []}]
 
         if len(key_role) == 2:
             idiom_dict['semantics'][-1]['role'].append(key_role[1][2:-3])
