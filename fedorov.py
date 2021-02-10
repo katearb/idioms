@@ -67,6 +67,8 @@ def transform_idiom_description_to_dictionary(idiom_description_list: list):
                 if line.strip() == "[m1] [/m]":
                     continue
                 if semantic_element and any(semantic_element.values()):
+                    if not semantic_element.get('dictionary', 0):
+                        semantic_element['dictionary'] = 'Fedorov'
                     current_element['semantics'].append(semantic_element)
                     semantic_element = {}
                 semantic_element['examples'] = []
