@@ -19,6 +19,7 @@ def leave_letters_only(phrase):
 
 dict_abbrs = {}
 style_phrase = {}
+all_abbrs = []
 
 key_dict = fedorov
 style_phrase[key_dict[0]['semantics'][0]['dictionary']] = {'phrases': len(key_dict)}
@@ -29,6 +30,9 @@ for phrase in key_dict:
     abbrs_here = sum([len(dic.get('abbr', [])) for dic in phrase['semantics']])
     dict_abbrs[phrase['semantics'][0]['dictionary']] = dict_abbrs.get(
         phrase['semantics'][0]['dictionary'], 0) + abbrs_here
+    for sem in phrase['semantics']:
+        if 'abbr' in sem.keys():
+            all_abbrs.extend(sem['abbr'])
 
 for dictionary in [fedosov, kveselevich, myurrey, volkova]:
     style_phrase[dictionary[0]['semantics'][0]['dictionary']] = {'phrases': len(dictionary)}
@@ -42,6 +46,9 @@ for dictionary in [fedosov, kveselevich, myurrey, volkova]:
                         abbrs_here = sum([len(dic.get('abbr', [])) for dic in article['semantics']])
                         dict_abbrs[article['semantics'][0]['dictionary']] = dict_abbrs.get(
                             article['semantics'][0]['dictionary'], 0) + abbrs_here
+                        for sem in article['semantics']:
+                            if 'abbr' in sem.keys():
+                                all_abbrs.extend(sem['abbr'])
                         break
 
                 break
@@ -51,15 +58,18 @@ for dictionary in [fedosov, kveselevich, myurrey, volkova]:
             abbrs_here = sum([len(dic.get('abbr', [])) for dic in article['semantics']])
             dict_abbrs[article['semantics'][0]['dictionary']] = dict_abbrs.get(
                 article['semantics'][0]['dictionary'], 0) + abbrs_here
+            for sem in article['semantics']:
+                if 'abbr' in sem.keys():
+                    all_abbrs.extend(sem['abbr'])
 
     all_phrases.union(current_dict_left)
-
-print(dict_abbrs)
-print(sum(dict_abbrs.values()))
 
 for dic in dict_abbrs:
     style_phrase[dic]['abbrs'] = dict_abbrs[dic]
     print(dic, style_phrase[dic])
+
+clean_abbrs = [ab[:-1] for ab in list(set(all_abbrs)) if ab[-1] == '.']
+print(set(clean_abbrs))
 
 with open('all_idioms.json', 'w', encoding='utf8') as fp:
     json.dump(key_dict, fp, ensure_ascii=False, indent=4)
