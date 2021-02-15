@@ -61,6 +61,5 @@ for dic in dict_abbrs:
     style_phrase[dic]['abbrs'] = dict_abbrs[dic]
     print(dic, style_phrase[dic])
 
-# with open('all_idioms.json', 'w', encoding='utf8') as fp:
-    # json.dump(key_dict, fp, ensure_ascii=False, indent=4)
-
+with open('all_idioms.json', 'w', encoding='utf8') as fp:
+    json.dump(key_dict, fp, ensure_ascii=False, indent=4)
