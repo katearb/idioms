@@ -69,7 +69,7 @@ for dic in dict_abbrs:
     print(dic, style_phrase[dic])
 
 clean_abbrs = [ab for ab in list(set(all_abbrs)) if ab[-1] == '.']
-print(set(clean_abbrs))
+print(sorted(set(all_abbrs)), len(set(all_abbrs)))
 
 with open('all_idioms.json', 'w', encoding='utf8') as fp:
     json.dump(key_dict, fp, ensure_ascii=False, indent=4)
