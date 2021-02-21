@@ -61,11 +61,17 @@ def transform_idiom_description_to_dictionary(idiom_description_list: list):
     current_element = {}
     current_element['phrase'], current_element['semantics'] = [], []
     semantic_element = {}
+    shared_abbr = ''
     for line in idiom_description_list:
+        if re.search(r'\[m1\]\[p\](.*)\[/p\]\[/m\]', line.strip()):
+            shared_abbr = parse_m1(line.strip())['abbr']
+            continue
+
         if line.startswith('\t'):
             if line.strip().startswith('[m1]'):
                 if line.strip() == "[m1] [/m]":
                     continue
+
                 if semantic_element and any(semantic_element.values()):
                     if not semantic_element.get('dictionary', 0):
                         semantic_element['dictionary'] = 'Fedorov'
@@ -73,15 +79,21 @@ def transform_idiom_description_to_dictionary(idiom_description_list: list):
                     semantic_element = {}
                 semantic_element['examples'] = []
                 res = parse_m1(line.strip())
-                if 'abbr' in res:
+
+                if shared_abbr:
+                    semantic_element['abbr'] = shared_abbr
+                elif 'abbr' in res:
                     semantic_element['abbr'] = res['abbr']
+
                 if 'meaning' in res:
                     if res['meaning'].startswith('— '):
                         semantic_element['source'] = clean(res['meaning'].strip())
                     else:
                         semantic_element['meaning'] = clean(res['meaning'].strip())
+
                 if 'role' in res:
                     semantic_element['role'] = res['role']
+
             elif line.strip().startswith('[m2]'):
                 try:
                     semantic_element['examples'].append(parse_m2(line))
@@ -90,6 +102,7 @@ def transform_idiom_description_to_dictionary(idiom_description_list: list):
         else:
             current_element['phrase'].append(clean(line.strip()))
     semantic_element['dictionary'] = 'Fedorov'
+    shared_abbr = ''
     current_element['semantics'].append(semantic_element)
     return current_element
 
@@ -115,7 +128,10 @@ for line_index, line in enumerate(dsl_dictionary):
             new_idiom_indicator = False
         current_idiom_description.append(line)
 
-
+for idiom in idioms_lists:
+    for meaning_dict in idiom['semantics'].copy():
+        if 'meaning' not in list(meaning_dict.keys()) or not meaning_dict['meaning']:
+            idiom['semantics'].remove(meaning_dict)
 
 #os.remove('idioms.json')
 with open('fedorov.json', 'w', encoding='utf8') as fp:

@@ -27,9 +27,9 @@ all_phrases = set()
 current_dict_left = set()
 for phrase in key_dict:
     all_phrases.union(set([leave_letters_only(p) for p in phrase['phrase'] if len(leave_letters_only(p)) > 1]))
-    abbrs_here = sum([len(dic.get('abbr', [])) for dic in phrase['semantics']])
+    '''    abbrs_here = sum([len(dic.get('abbr', [])) for dic in phrase['semantics']])
     dict_abbrs[phrase['semantics'][0]['dictionary']] = dict_abbrs.get(
-        phrase['semantics'][0]['dictionary'], 0) + abbrs_here
+        phrase['semantics'][0]['dictionary'], 0) + abbrs_here'''
     for sem in phrase['semantics']:
         if 'abbr' in sem.keys():
             all_abbrs.extend(sem['abbr'])
@@ -69,7 +69,6 @@ for dic in dict_abbrs:
     print(dic, style_phrase[dic])
 
 clean_abbrs = [ab for ab in list(set(all_abbrs)) if ab[-1] == '.']
-print(sorted(set(all_abbrs)), len(set(all_abbrs)))
 
 with open('all_idioms.json', 'w', encoding='utf8') as fp:
     json.dump(key_dict, fp, ensure_ascii=False, indent=4)
