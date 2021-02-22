@@ -24,7 +24,7 @@ for line in dictionary_lines:
 
         abbrs = re.findall(r'\[p](.*?)\[/p]', phrase_mean[0])
         for abbr in abbrs:
-            idiom_dict['semantics'][-1]['abbr'].append(abbr)
+            idiom_dict['semantics'][-1]['abbr'].append(abbr.strip())
             phrase_mean[0] = phrase_mean[0].replace('[p]' + abbr + '[/p]', '')
 
         find_role = phrase_mean[0].replace(')', '').split(']')
@@ -36,10 +36,10 @@ for line in dictionary_lines:
                     not any([letter.isalpha() for letter in find_role[-1]]):
                 pass
             else:
-                idiom_dict['semantics'][0]['role'].append(find_role[-1])
+                idiom_dict['semantics'][0]['role'].append(find_role[-1].strip())
                 phrase_mean[0] = phrase_mean[0].replace(find_role[-1], '')
 
-        idiom_dict['phrase'].append(clean_phrase(phrase_mean[0]))
+        idiom_dict['phrase'].append(clean_phrase(phrase_mean[0]).strip())
 
         if phrase_mean[-1] != '\n' and phrase_mean[-1] != '\t' and \
                 any([letter.isalpha() for letter in phrase_mean[-1]]):

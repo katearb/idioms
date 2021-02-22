@@ -100,9 +100,8 @@ def transform_idiom_description_to_dictionary(idiom_description_list: list):
                 except KeyError:
                     semantic_element['examples'] = [] #TODO: Fix this dirty hack
         else:
-            current_element['phrase'].append(clean(line.strip()))
+            current_element['phrase'].append(clean(line).strip())
     semantic_element['dictionary'] = 'Fedorov'
-    shared_abbr = ''
     current_element['semantics'].append(semantic_element)
     return current_element
 
