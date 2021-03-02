@@ -37,7 +37,6 @@ for phrase in key_dict:
             all_abbrs.extend(sem['abbr'])
 
 for dictionary in [fedosov, kveselevich, myurrey, volkova]:
-    print('new dic')
     style_phrase[dictionary[0]['semantics'][0]['dictionary']] = {'phrases': len(dictionary)}
 
     for article in dictionary:

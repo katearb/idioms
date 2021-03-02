@@ -3,6 +3,7 @@ import json
 
 
 def find_examples(article):
+    text_example, source_example = '', ''
 
     for a in re.finditer(r'\[ex]\[lang id=1049](.*)\[/lang]\[/i]', article):
         text = re.search(r'\[ex]\[lang id=1049](.*)\[i]\(', a.group()).group().replace('[/i]', '')
@@ -47,9 +48,10 @@ for article_index, article in enumerate(dsl_dictionary.read().split('\n\n')[1:])
 
     if '[ex][lang id=1049]' in article:
         text_example, source_example = find_examples(article)
-        full_dict['semantics'][0]['examples'].append({'text': text_example, 'source': source_example})
+        if text_example:
+            full_dict['semantics'][-1]['examples'].append({'text': text_example, 'source': source_example})
 
-    full_dict['semantics'][0]['abbr'] = [abbr for abbr in abbr_list if ']'+abbr in article]
+    full_dict['semantics'][-1]['abbr'] = [abbr for abbr in abbr_list if ']'+abbr in article]
 
     if '[com]([i][lang id=1049]' in article:
         for line in re.finditer(r'\[com]\(\[i]\[lang id=1049](.*?)\[/m]', article):
@@ -61,9 +63,12 @@ for article_index, article in enumerate(dsl_dictionary.read().split('\n\n')[1:])
 
             if len(text_clean) == 1 or \
                     (len(text_clean) > 2 and not any([re.match(r'(.*?)[a-z]', elem) for elem in text_clean])):
-                full_dict['semantics'][0]['role'].append(text_clean[0])
+                full_dict['semantics'][-1]['role'].append(text_clean[0])
             else:
-                full_dict['semantics'][0]['meaning'] = text_clean[0]
+                if full_dict['semantics'][-1]['meaning']:
+                    full_dict['semantics'].append(
+                        {'dictionary': 'Kveselevich', 'role': [], 'meaning': '', 'abbr': [], 'examples': []})
+                full_dict['semantics'][-1]['meaning'] = text_clean[0]
 
     idioms_lists.append(full_dict)
 
