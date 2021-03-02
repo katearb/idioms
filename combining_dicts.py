@@ -14,6 +14,7 @@ with open('fedorov.json', 'r', encoding='utf-8') as file:
 
 
 def leave_letters_only(phrase):
+    phrase = phrase.replace('ё', 'е')
     return re.sub(r'[^а-я]', '', phrase.lower())
 
 
@@ -22,11 +23,12 @@ style_phrase = {}
 all_abbrs = []
 
 key_dict = fedorov
+print(len(key_dict))
 style_phrase[key_dict[0]['semantics'][0]['dictionary']] = {'phrases': len(key_dict)}
 all_phrases = set()
 current_dict_left = set()
 for phrase in key_dict:
-    all_phrases.union(set([leave_letters_only(p) for p in phrase['phrase'] if len(leave_letters_only(p)) > 1]))
+    all_phrases = all_phrases.union([leave_letters_only(p) for p in phrase['phrase'] if len(leave_letters_only(p)) > 1])
     '''    abbrs_here = sum([len(dic.get('abbr', [])) for dic in phrase['semantics']])
     dict_abbrs[phrase['semantics'][0]['dictionary']] = dict_abbrs.get(
         phrase['semantics'][0]['dictionary'], 0) + abbrs_here'''
@@ -35,6 +37,7 @@ for phrase in key_dict:
             all_abbrs.extend(sem['abbr'])
 
 for dictionary in [fedosov, kveselevich, myurrey, volkova]:
+    print('new dic')
     style_phrase[dictionary[0]['semantics'][0]['dictionary']] = {'phrases': len(dictionary)}
 
     for article in dictionary:
@@ -42,6 +45,7 @@ for dictionary in [fedosov, kveselevich, myurrey, volkova]:
             if leave_letters_only(phrase) in all_phrases:
                 for key_phrase in key_dict:
                     if leave_letters_only(phrase) in [leave_letters_only(p) for p in key_phrase['phrase']]:
+                        # print(phrase)
                         key_phrase['semantics'].extend(article['semantics'])
                         abbrs_here = sum([len(dic.get('abbr', [])) for dic in article['semantics']])
                         dict_abbrs[article['semantics'][0]['dictionary']] = dict_abbrs.get(
