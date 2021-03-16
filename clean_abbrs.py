@@ -27,5 +27,5 @@ for phrase in idioms:
             new_abbrs = [dict_abbrs.get(label, label) for label in sem['abbr']]
             sem['abbr'] = new_abbrs
 
-with open('all_idioms.json', 'w', encoding='utf8') as fp:
+with open('all_idioms.json', 'w', encoding='utf-8') as fp:
     json.dump(idioms, fp, ensure_ascii=False, indent=4)
